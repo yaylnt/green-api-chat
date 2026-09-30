@@ -7,7 +7,7 @@ export const store = configureStore({
   reducer: { chats: chatsReducer },
 });
 
-// Сохраняем в sessionStorage при каждом изменении стейта.
+// Сохраняем в localStorage при каждом изменении стейта.
 store.subscribe(() => {
   saveChatsState(store.getState().chats);
 });
