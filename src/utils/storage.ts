@@ -1,4 +1,5 @@
-// Утилиты для работы с хранилищем
+import type { UserData } from "../api/types";
+import type { ChatsState } from "../store/chatsSlice";
 
 const KEYS = {
   USER_DATA: 'green-api_user_data',
@@ -6,9 +7,8 @@ const KEYS = {
 } as const;
 
 function getItem<T>(key: string): T | null {
-  const raw = sessionStorage.getItem(key);
+  const raw = localStorage.getItem(key);
   if (!raw) return null;
-
   try {
     return JSON.parse(raw) as T;
   } catch {
@@ -16,20 +16,20 @@ function getItem<T>(key: string): T | null {
   }
 }
 
-function setItem(key: string, value: unknown): void {
-  sessionStorage.setItem(key, JSON.stringify(value));
+function setItem<T>(key: string, value: T): void {
+  localStorage.setItem(key, JSON.stringify(value));
 }
 
 function removeItem(key: string): void {
-  sessionStorage.removeItem(key);
+  localStorage.removeItem(key);
 }
 
 export function loadData<T>(): T | null {
   return getItem<T>(KEYS.USER_DATA);
 }
 
-export function saveData(creds: unknown): void {
-  setItem(KEYS.USER_DATA, creds);
+export function saveData(data: UserData): void {
+  setItem(KEYS.USER_DATA, data);
 }
 
 export function clearData(): void {
@@ -40,7 +40,7 @@ export function loadChatsState<T>(): T | null {
   return getItem<T>(KEYS.CHATS_STATE);
 }
 
-export function saveChatsState(state: unknown): void {
+export function saveChatsState(state: ChatsState): void {
   setItem(KEYS.CHATS_STATE, state);
 }
 
