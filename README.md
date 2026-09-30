@@ -2,7 +2,7 @@
 
 Веб-интерфейс для отправки и получения текстовых сообщений в WhatsApp через сервис [GREEN-API](https://green-api.com/). Внешний вид построен по образцу [WhatsApp Web](https://web.whatsapp.com/). Тестовое задание на должность «Фронтенд разработчик React».
 
-💻**Демо:** [Клик](https://yaylnt.github.io/green-api-chat/)
+## 💻[Демо](https://yaylnt.github.io/green-api-chat/)
 #### Страница логина
 <img width="900" height="482" alt="image" src="https://github.com/user-attachments/assets/2f5d6297-e657-4536-889c-2d3e7f0d165a" />
 
