@@ -1,0 +1,24 @@
+.messageField {
+  display: flex;
+  gap: var(--gap-base);
+  padding: var(--gap-base);
+  background: var(--background-color-main);
+  border-top: 1px solid var(--border-color);
+  align-items: center;
+}
+
+.input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-base);
+  font-size: var(--font-size-base);
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(29, 170, 97, 0.1);
+}
