@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { Sidebar } from '../../components/Sidebar';
 import { ChatWindow } from '../../components/ChatWindow';
 import { useAppDispatch, useAppSelector } from '../../store/store';
@@ -18,8 +18,6 @@ export function ChatsPage({ userData, onLogout }: ChatsPageProps) {
   
   const [isLoadingSend, setIsLoadingSend] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const pollingAbortRef = useRef<AbortController | null>(null);
 
   const formatChatId = (phone: string) => `${phone.replace(/\D/g, '')}@c.us`;
 
@@ -68,68 +66,51 @@ export function ChatsPage({ userData, onLogout }: ChatsPageProps) {
 
   const processNotification = useCallback(
     (notification: Notification) => {
-      try {
-        const { body, receiptId } = notification;
-        if (body.typeWebhook === 'incomingMessageReceived') {
-          const { senderData, messageData } = body;
-          if (messageData?.typeMessage === 'textMessage') {
-            const chatId = senderData.chatId.replace('@c.us', '');
-            const text = messageData.textMessageData?.textMessage || '';
-            dispatch(chatCreated({ chatId }));
-            dispatch(
-              messageAdded({
-                id: body.idMessage,
-                chatId,
-                text,
-                direction: 'incoming',
-                timestamp: body.timestamp,
-              })
-            );
-          }
-        }
-        if (receiptId) {
-          deleteNotification(userData, receiptId).catch((err) =>
-            console.error('Ошибка удаления уведомления:', err)
-          );
-        }
-      } catch (err) {
-        console.error('Ошибка обработки уведомления:', err);
-      }
+      const { body } = notification;
+      if (body.typeWebhook !== 'incomingMessageReceived') return;
+      const { senderData, messageData } = body;
+      if (messageData?.typeMessage !== 'textMessage') return;
+
+      const chatId = senderData.chatId.replace('@c.us', '');
+      const text = messageData.textMessageData?.textMessage || '';
+
+    dispatch(chatCreated({ chatId }));
+    dispatch(
+    messageAdded({
+        id: body.idMessage,
+        chatId,
+        text,
+        direction: 'incoming',
+        timestamp: body.timestamp,
+    })
+    );
     },
-    [dispatch, userData]
-  );
+    [dispatch]
+    );
 
   useEffect(() => {
-    // AbortController для текущей сессии полинга
-    pollingAbortRef.current = new AbortController();
-    const signal = pollingAbortRef.current.signal;
-
+    const controller = new AbortController();
+    const { signal } = controller;
     const poll = async () => {
-      try {
-        const notification = await receiveNotification(userData, signal, 5);
-        if (notification) {
-          processNotification(notification);
-        }
-      } catch (err) {
-        if (!(err instanceof Error && err.name === 'AbortError')) {
+      while (!signal.aborted) {
+        try {
+          const notification = await receiveNotification(userData, signal);
+          if (notification) {
+            processNotification(notification);
+            await deleteNotification(userData, notification.receiptId);
+          }
+        } catch (err) {
+          if (signal.aborted) return; 
           console.error('Ошибка полинга:', err);
-        }
-      } finally {
-        // Если полинг не был отменён, начинаем следующий запрос
-        if (!signal.aborted) {
-          poll();
+          // пауза, чтобы при ошибке не отправлять запросы на сервер сервер без остановки
+          await new Promise((resolve) => setTimeout(resolve, 3000));
         }
       }
     };
 
     poll();
-
-    return () => {
-      if (pollingAbortRef.current) {
-        pollingAbortRef.current.abort();
-      }
-    };
-  }, [userData, dispatch, processNotification]);
+    return () => controller.abort();
+    }, [userData, processNotification]);
 
   // Подготовка данных для Sidebar
   const chats = Object.entries(messagesByChat).map(([chatId, messages]) => ({
