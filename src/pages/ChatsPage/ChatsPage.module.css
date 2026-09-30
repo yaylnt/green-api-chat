@@ -14,20 +14,6 @@
   position: relative;
 }
 
-.error {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: var(--background-color-secondary);
-  color: var(--text-secondary);
-}
-
-.error p {
-  margin: 0;
-  font-size: var(--font-size-medium);
-}
-
 .errorBanner {
   background: var(--background-color-secondary);
   padding: 12px 16px;

@@ -41,7 +41,7 @@ function App() {
         path="/chat"
         element={
           <ProtectedRoute isAuthenticated={userData !== null}>
-            {userData && <ChatsPage onLogout={handleLogout} />}
+            {userData && <ChatsPage userData={userData} onLogout={handleLogout} />}
           </ProtectedRoute>
         }
       />

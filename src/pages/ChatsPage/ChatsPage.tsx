@@ -5,21 +5,20 @@ import { useAppDispatch, useAppSelector } from '../../store/store';
 import { messageAdded, chatCreated, activeChatSet } from '../../store/chatsSlice';
 import { sendMessage, receiveNotification, deleteNotification } from '../../api/greenApi';
 import type { MessageNotification, UserData, Notification } from '../../api/types';
-import { loadData } from '../../utils/storage';
 import styles from './ChatsPage.module.css';
 
 interface ChatsPageProps {
+  userData: UserData;
   onLogout: () => void;
 }
 
-export function ChatsPage({ onLogout }: ChatsPageProps) {
+export function ChatsPage({ userData, onLogout }: ChatsPageProps) {
   const dispatch = useAppDispatch();
   const { messagesByChat, activeChatId } = useAppSelector((state) => state.chats);
   
   const [isLoadingSend, setIsLoadingSend] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const userData = loadData<UserData>();
   const pollingAbortRef = useRef<AbortController | null>(null);
 
   const formatChatId = (phone: string) => `${phone.replace(/\D/g, '')}@c.us`;
@@ -36,7 +35,7 @@ export function ChatsPage({ onLogout }: ChatsPageProps) {
   // Отправка сообщения
   const handleSendMessage = useCallback(
     async (text: string) => {
-      if (!activeChatId || !text.trim() || !userData) return;
+      if (!activeChatId || !text.trim()) return;
 
       setIsLoadingSend(true);
       setError(null);
@@ -69,7 +68,6 @@ export function ChatsPage({ onLogout }: ChatsPageProps) {
 
   const processNotification = useCallback(
     (notification: Notification) => {
-      if (!userData) return;
       try {
         const { body, receiptId } = notification;
         if (body.typeWebhook === 'incomingMessageReceived') {
@@ -102,8 +100,6 @@ export function ChatsPage({ onLogout }: ChatsPageProps) {
   );
 
   useEffect(() => {
-    if (!userData) return;
-
     // AbortController для текущей сессии полинга
     pollingAbortRef.current = new AbortController();
     const signal = pollingAbortRef.current.signal;
@@ -134,14 +130,6 @@ export function ChatsPage({ onLogout }: ChatsPageProps) {
       }
     };
   }, [userData, dispatch, processNotification]);
-
-  if (!userData) {
-    return (
-      <div className={styles.error}>
-        <p>Пожалуйста, авторизуйтесь</p>
-      </div>
-    );
-  }
 
   // Подготовка данных для Sidebar
   const chats = Object.entries(messagesByChat).map(([chatId, messages]) => ({
