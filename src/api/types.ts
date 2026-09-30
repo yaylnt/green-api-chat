@@ -24,7 +24,7 @@ export interface Notification {
 
 export interface ResponseBody {
   typeWebhook: string;
-  idMessage?: string;
+  idMessage: string;
   instanceData: {
     idInstance: string;
     wid: string;
@@ -49,3 +49,12 @@ export interface ResponseBody {
 // 'checking' - отправили запрос getStateInstance, ждём ответ
 // 'error' - запрос вернул ошибку (неверные данные, сеть и т.д.)
 export type LoginStatus = 'idle' | 'checking' | 'error';
+
+// Одно сообщение в чате
+export interface MessageNotification {
+  id: string;          // idMessage от GREEN-API
+  chatId: string;       // например, '79991234567' - к какому чату относится
+  text: string;
+  direction: 'outgoing' | 'incoming';
+  timestamp: number;
+}
