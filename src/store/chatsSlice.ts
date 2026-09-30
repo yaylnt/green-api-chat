@@ -18,10 +18,12 @@ const chatsSlice = createSlice({
   reducers: {
     // Добавить новое сообщение
     messageAdded(state, action: PayloadAction<MessageNotification>) {
-      const { chatId } = action.payload;
+      const { chatId, id } = action.payload;
       if (!state.messagesByChat[chatId]) {
         state.messagesByChat[chatId] = [];
       }
+      // если сообщение с таким id уже есть, второй раз не добавляем
+      if (state.messagesByChat[chatId].some((m) => m.id === id)) return;
       state.messagesByChat[chatId].push(action.payload);
     },
 
