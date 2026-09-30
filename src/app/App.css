@@ -1,0 +1,72 @@
+:root {
+  --main-font-family: 'Roboto', sans-serif;
+  --font-size-small: 12px;
+  --font-size-base: 14px;
+  --font-size-medium: 16px;
+  --font-size-large: 20px;
+
+  --background-color-main: #ffffff;
+  --background-color-secondary: #f7f5f3;
+  --chats-background-color: #f5f1eb;
+
+  --text-primary: #0a0a0a;
+  --text-secondary: #00000099;
+  --avatar-text-color: #ffffff;
+
+  --accent-color: #1daa61;
+  --secondary-button-color: #e0e0e0;
+  --secondary-hover-bg: #f6f5f4;
+  --border-color: #e0e0e0;
+  --error-color: #bb1414;
+
+  --message-sent-bg: #d9fdd3;
+  --message-received-bg: #ffffff;
+
+  --gap-small: 8px;
+  --gap-base: 12px;
+  --gap-medium: 16px;
+
+  --border-radius-base: 16px;
+}
+
+/* ─── Reset ──────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--main-font-family);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  background-color: var(--background-color-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font: inherit;
+}
