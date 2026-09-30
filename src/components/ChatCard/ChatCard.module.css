@@ -1,0 +1,67 @@
+.chatCard {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-base);
+  padding: var(--gap-base);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.chatCard:hover {
+  background-color: var(--secondary-hover-bg);
+}
+
+.chatCard.active {
+  background-color: var(--secondary-hover-bg);
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, var(--accent-color) 0%, #42db8c 100%);
+  color: var(--avatar-text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: var(--font-size-large);
+  flex-shrink: 0;
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.title {
+  font-size: var(--font-size-medium);
+  font-weight: 400;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.time {
+  font-size: var(--font-size-small);
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.preview {
+  margin: 0;
+  font-size: var(--font-size-base);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
