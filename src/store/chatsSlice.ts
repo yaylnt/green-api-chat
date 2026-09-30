@@ -37,9 +37,13 @@ const chatsSlice = createSlice({
     activeChatSet(state, action: PayloadAction<string>) {
       state.activeChatId = action.payload;
     },
+
+    chatsReset() {
+      return { messagesByChat: {}, activeChatId: null };
+    },
   },
 });
 
-export const { messageAdded, chatCreated, activeChatSet } =
+export const { messageAdded, chatCreated, activeChatSet, chatsReset } =
   chatsSlice.actions;
 export default chatsSlice.reducer;

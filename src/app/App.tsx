@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useAppDispatch } from '../store/store';
+import { chatsReset } from '../store/chatsSlice';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { LoginPage } from '../pages/LoginPage';
 import { ChatsPage } from '../pages/ChatsPage/';
@@ -9,8 +11,7 @@ import './App.css';
 
 
 function App() {
-  // Ленивая инициализация: данные читаются из хранилища до первого рендера,
-  // поэтому при обновлении страницы на /chat нет промежуточного редиректа на /login.
+  const dispatch = useAppDispatch();
   const [userData, setUserData] = useState<UserData | null>(() =>
     loadData<UserData>()
   );
@@ -22,6 +23,7 @@ function App() {
 
   const handleLogout = () => {
     clearData();
+    dispatch(chatsReset());
     setUserData(null);
   };
 
