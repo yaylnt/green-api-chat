@@ -114,6 +114,12 @@
   background: var(--background-color-secondary);
 }
 
+.empty .logoutButton {
+    position: absolute;
+    top: var(--gap-medium);
+    right: var(--gap-medium);
+}
+
 .emptyContent {
   text-align: center;
   color: var(--text-secondary);

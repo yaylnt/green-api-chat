@@ -34,6 +34,9 @@ export function ChatWindow({
   if (!chatId) {
     return (
       <div className={styles.empty}>
+        <button className={styles.logoutButton} type="button" onClick={onLogout}aria-label="Logout" title="Logout">
+          <img src={logoutIcon} alt="" aria-hidden="true" />
+        </button>
         <div className={styles.emptyContent}>
           <p className={styles.emptyTitle}>Выберите чат</p>
           <p className={styles.emptyText}>Выберите существующий чат или создайте новый</p>
